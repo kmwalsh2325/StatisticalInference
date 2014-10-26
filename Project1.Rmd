@@ -1,8 +1,7 @@
 ---
-title: "Project 1"
+title: "Project 1 Part 1"
 author: "Kaylee Walsh"
 date: "October 23, 2014"
-output: html_document
 ---
 
 ## About
@@ -35,6 +34,7 @@ sim.matrix <- matrix(rexp(n*nsims, lambda), nsims)
 ## Inferential Data Analysis
 
 Illustrate via simulation and associated explanatory text the properties of the distribution of the mean of 40 exponential(0.2)s.  You should
+
 1. Show where the distribution is centered at and compare it to the theoretical center of the distribution.
 2. Show how variable it is and compare it to the theoretical variance of the distribution.
 3. Show that the distribution is approximately normal.
@@ -68,7 +68,7 @@ From the theoretical standard deviation, the standard error is `r round(100*abs(
 
 ### Normality
 
-To show normality we include a histogram plot to illustrate the symmetry about 5 of the distribution of means.
+Plotting the distribution of means we see this is indeed roughly normal.
 
 ```{r}
 hist(apply(sim.matrix, 1, mean), main = "Normality of the Exp(0.2) Distribution", xlab = "")
@@ -84,4 +84,3 @@ xmu + c(-1, 1) * 1.96 * xsd
 pmu + c(-1, 1) * 1.96 * psd/sqrt(n) # population CI
 ```
 
-# Part 2
