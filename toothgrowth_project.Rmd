@@ -1,0 +1,91 @@
+---
+title: "ToothGrowth Analysis Project"
+author: "Kaylee Walsh"
+date: "March 20, 2015"
+output: pdf_document
+---
+
+# Overview
+
+The ToothGrowth data is the records of an experiment of the effect of Vitamin C on tooth growth in guinea pigs. The two supplements are orange juice (OJ) and ascorbic acid (VC) in three dose levels (0.5, 1, and 2 mg). We look at the effects between supplements and doses.
+
+# Exploratory
+
+```{r}
+library(data.table)
+data(ToothGrowth)
+str(ToothGrowth)
+summary(ToothGrowth$len)
+hist(ToothGrowth$len)
+dt <- as.data.table(ToothGrowth) ## I like to work in data.table over data.frame
+```
+
+The data has three columns: length of tooth growth after receiving treatment, supplement used, and the dosage administered. The spread of the length of teeth is `r summary(ToothGrowth$len)[[6]] - summary(ToothGrowth$len)[[1]]`. We see that the histogram is slightly skewed left, as hinted at since the median is greater than the mean. That might be hinting at overall growth between supplements and dosages. Now we break down and analyze which supplement/dosage pairing is most effective.
+
+# Compare Doses, Fixed Supplements
+
+## OJ Conclusions
+
+```{r}
+oj1 <- dt[supp == "OJ" & dose == 0.5, len]
+oj2 <- dt[supp == "OJ" & dose == 1.0, len]
+oj3 <- dt[supp == "OJ" & dose == 2.0, len]
+
+t.test(oj1, oj2, paired = F)
+t.test(oj2, oj3, paired = F)
+t.test(oj1, oj3, paired = F)
+```
+
+None of these confidence intervals contain zero which indicates that any increase in dosage of orange juice will lead to effective tooth growth.
+
+## VC Conclusions
+
+```{r}
+vc1 <- dt[supp == "VC" & dose == 0.5, len]
+vc2 <- dt[supp == "VC" & dose == 1.0, len]
+vc3 <- dt[supp == "VC" & dose == 2.0, len]
+
+t.test(vc1, vc2, paired = F)
+t.test(vc2, vc3, paired = F)
+t.test(vc1, vc3, paired = F)
+```
+
+Again, none of these confidence intervals contain zero which indicates that any increase in dosage of vitamin C by ascorbic acid will lead to effective tooth growth.
+
+Since both supplements show effective growth in tooth length, we can conclude increasing Vitamin C in the diet will lead to longer teeth. Now we compare which supplement is more effective at tooth growth.
+
+# Compare Supplements, Fixed Doses
+
+## Dosage of 0.5 mg Conclusions
+
+```{r}
+t.test(oj1, vc1, paired = F)
+```
+
+Since this interval does not contain zero, then we can conclude that at a dosage of 0.5 mg for both supplements, orange juice is more effective than ascorbic acid at tooth growth.
+
+## Dosage of 1.0 mg Conclusions
+
+```{r}
+t.test(oj2, vc2, paired = F)
+```
+
+Since this interval does not contain zero, then we can conclude that at a dosage of 1.0 mg for both supplements, orange juice is more effective than ascorbic acid at tooth growth.
+
+## Dosage of 2.0 mg Conclusions
+
+```{r}
+t.test(oj3, vc3, paired = F)
+```
+
+Since this interval DOES contain zero, we can conclude that at the dosage of 2.0 mg for both supplements, they are approximately equivalent in effecacy for tooth growth.
+
+# Results
+
+Overall we can say that both supplements are effective at tooth growth, however when comparing supplements we see orange juice is more effective than ascorbic acid except for the dosage of 2.0 mg where they are equally effective. 
+
+These tests were run under the assumptions that the observations were not paired, but statistically independent and that the variances were common.
+
+
+
+
